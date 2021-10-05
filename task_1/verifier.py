@@ -22,7 +22,10 @@ questions = [
 answers = inquirer.prompt(questions)
 
 if(choices_temp.index(answers["algorithm"]) > 1):
-    Threads = int(input("Provide number of thread : "))
+    try:
+        Threads = int(input("Provide number of thread : "))
+    except:
+        Threads = 1
 else:
     Threads = 1
 
@@ -38,7 +41,7 @@ C_expected = np.matmul(A, B)
 
 print("building source")
 
-build_result = subprocess.run("cc -Werror -Wall -g -o matrix_multiply.elf matrix_multiply.c", shell=True)
+build_result = subprocess.run("./make.sh", shell=True)
 if build_result.returncode != 0:
     print('build failed')
     exit()
@@ -59,7 +62,7 @@ with open('out.txt','w+') as fout:
         errors = ferr.read()
 
 if result.returncode != 0:
-    print('Implementation failed with code' + str(result.returncode))
+    print('Implementation failed with code ' + str(result.returncode))
     exit()
 
 C = np.loadtxt('C.csv', delimiter=',')
